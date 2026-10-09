@@ -8,3 +8,9 @@ _check.js
 __pycache__/
 *.pyc
 .DS_Store
+.cache/
+ranking.json
+ranking-snapshots/
+details.json
+editorial.json
+report.html

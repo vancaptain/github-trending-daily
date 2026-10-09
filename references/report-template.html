@@ -91,6 +91,9 @@ h2.sec-title{font-size:17px;margin:34px 0 4px}
 .sub{color:var(--fg2);font-size:13px;margin-bottom:12px}
 .tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
 table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px}
+th[aria-sort="ascending"] button::after{content:" ↑";color:var(--accent)}
+th[aria-sort="descending"] button::after{content:" ↓";color:var(--accent)}
+th button{background:none;border:0;color:inherit;font:inherit;text-align:inherit;width:100%}
 th{position:sticky;top:0;background:var(--card2);text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--fg2);padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
 th .arr{font-size:10px;color:var(--accent)}
 td{padding:9px 14px;border-bottom:1px solid #21262d;vertical-align:top}
@@ -101,7 +104,10 @@ td .d{color:var(--fg2)}
 .todaycell{color:var(--accent);font-weight:700}
 footer{margin-top:40px;color:var(--fg3);font-size:12px;text-align:center;line-height:1.8}
 .count-note{font-size:12.5px;color:var(--fg3);margin:0 0 10px}
-.empty{padding:40px;text-align:center;color:var(--fg3)}
+.empty{padding:40px;text-align:center;color:var(--fg2)}
+.os-group{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;margin:2px 6px 2px 0}
+.evidence{font-size:12px;overflow-wrap:anywhere;color:var(--fg2)}
+@media(max-width:520px){.wrap{padding:0 12px}.hd{padding:12px}.card{padding:14px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.search{min-width:0;flex-basis:100%}.today .n{font-size:15px}.rname{font-size:14px}.card-head{gap:7px}.lang-toggle{margin-left:auto}}
 </style>
 </head>
 <body>
@@ -120,6 +126,7 @@ footer{margin-top:40px;color:var(--fg3);font-size:12px;text-align:center;line-he
 
 <main class="wrap">
   <div class="stats" id="stats"></div>
+  <p class="sub" id="scopeNote"></p>
 
   <div class="controls">
     <div class="search">
@@ -135,11 +142,13 @@ footer{margin-top:40px;color:var(--fg3);font-size:12px;text-align:center;line-he
   </div>
   <div class="chips" id="chips" role="group" aria-label="Category"></div>
 
+  <h2 class="sec-title" id="featuredTitle"></h2>
+  <p class="sub" id="featuredSub"></p>
   <div class="grid" id="cards"></div>
 
   <h2 class="sec-title" id="moreTitle">完整榜单 · 其余项目</h2>
   <p class="sub" id="moreSub">按今日新增 Star 排序 · 点击表头可重新排序</p>
-  <p class="count-note" id="countNote"></p>
+  <p class="count-note" id="countNote" aria-live="polite"></p>
   <div class="tblwrap">
     <table id="tbl" aria-label="Full ranking table">
       <thead><tr>
@@ -160,6 +169,8 @@ footer{margin-top:40px;color:var(--fg3);font-size:12px;text-align:center;line-he
 <script>
 "use strict";
 /* ---------- data ---------- */
+/* BEGIN REPORT_DATA */
+const REPORT = {date:"2026-10-09", scope:"demo", fetched_at:null, sources:[], editorial:true};
 const DATA = [
  {name:"morluto/rea",lang:"TypeScript",total:35521,today:15335,cat:"agent",feat:1,
   os:["cli"],osx:0,
@@ -344,31 +355,31 @@ const MORE = [
  {name:"ROCm/rocm-systems",lang:"C++",total:527,today:2,cat:"devtool",d:{zh:"AMD ROCm 系统项目 super repo。",en:"Super repo for AMD ROCm systems projects."},os:["linux"]}
 ];
 
+/* END REPORT_DATA */
+
 /* ---------- i18n ---------- */
 const I18N = {
- zh:{title:"GitHub Trending 每日精选",date:"2026-10-09",
-    s1:"上榜项目",s2:"今日新增 Star 总计",s3:"单日最高",s4:"Agent / AI 类占比",
-    ph:"搜索项目名 / 描述…",cats:{all:"全部",skill:"Agent Skill",agent:"Agent 工具/框架",desktop:"桌面应用",devtool:"开发者工具",selfhost:"自托管服务",web:"Web 应用",learn:"学习资源",creative:"创意应用",rag:"知识库 / RAG",framework:"前端/框架",model:"模型",hardware:"硬件"},
-    featTitle:"今日焦点 · Top 21（按今日 Star 排序）",featSub:"用途 · 功能 · 注意事项 · 系统兼容性 · 官方链接",
-    moreTitle:"完整榜单 · 其余项目",moreSub:"按今日新增 Star 排序 · 点击表头重新排序",count:"共 {n} 个项目",
+ zh:{title:"GitHub Trending 每日精选",
+    s1:"快照项目",s2:"今日新增 Star 总计",s3:"单日最高",s4:"分类占比：Skill / Agent / RAG / 模型",
+    ph:"搜索项目名 / 描述…",cats:{all:"全部",skill:"Agent Skill",agent:"Agent 工具/框架",desktop:"桌面应用",devtool:"开发者工具",selfhost:"自托管服务",web:"Web 应用",learn:"学习资源",creative:"创意应用",rag:"知识库 / RAG",framework:"前端/框架",model:"模型",hardware:"硬件",uncategorized:"未分类"},
+    moreSub:"按今日新增 Star 排序 · 点击表头重新排序",count:"共 {n} 个项目",
     pPurpose:"用途",pFeats:"核心功能",pWarns:"注意事项",pOs:"系统兼容性",
-    today:"今日",stars:"总 Star",foot:"数据来源：github.com/trending（总榜 + 7 个语言榜聚合去重）· 星数为抓取时刻快照 · 系统兼容性依据官方 Release 附件与 README 判定",
-    osLabel:{win:"Windows",mac:"macOS",linux:"Linux",web:"Web 浏览器",android:"Android",docker:"Docker / 自托管",cli:"CLI / MCP",none:"系统无关（Agent Skill / 文档）",hardware:"专用硬件 (ESP32)"}},
- en:{title:"GitHub Trending Daily Digest",date:"2026-10-09",
-    s1:"Repos listed",s2:"Stars gained today",s3:"Top single-day",s4:"Agent / AI share",
-    ph:"Search projects…",cats:{all:"All",skill:"Agent Skill",agent:"Agent tools/frameworks",desktop:"Desktop apps",devtool:"Dev tools",selfhost:"Self-hosted",web:"Web apps",learn:"Learning",creative:"Creative",rag:"Knowledge / RAG",framework:"Frontend/framework",model:"Models",hardware:"Hardware"},
-    featTitle:"Today's Focus · Top 21 (by stars gained today)",featSub:"Purpose · Features · Caveats · OS compatibility · Official link",
-    moreTitle:"Full Ranking · Remaining Repos",moreSub:"Sorted by stars gained today · click headers to re-sort",count:"{n} projects",
+    today:"今日",stars:"总 Star",
+    osLabel:{win:"Windows",mac:"macOS",linux:"Linux",web:"Web 浏览器",android:"Android",ios:"iOS",docker:"Docker / 自托管",cli:"CLI / MCP",none:"文档 / Skill",hardware:"专用硬件 (ESP32)"}},
+ en:{title:"GitHub Trending Daily Digest",
+    s1:"Snapshot repos",s2:"Stars gained today",s3:"Top single-day",s4:"Share: Skill / Agent / RAG / Model",
+    ph:"Search projects…",cats:{all:"All",skill:"Agent Skill",agent:"Agent tools/frameworks",desktop:"Desktop apps",devtool:"Dev tools",selfhost:"Self-hosted",web:"Web apps",learn:"Learning",creative:"Creative",rag:"Knowledge / RAG",framework:"Frontend/framework",model:"Models",hardware:"Hardware",uncategorized:"Uncategorized"},
+    moreSub:"Sorted by stars gained today · click headers to re-sort",count:"{n} projects",
     pPurpose:"Purpose",pFeats:"Key features",pWarns:"Caveats",pOs:"OS compatibility",
-    today:"today",stars:"total stars",foot:"Source: github.com/trending (overall + 7 language boards, deduplicated) · star counts are a snapshot · OS support inferred from official release assets and READMEs",
-    osLabel:{win:"Windows",mac:"macOS",linux:"Linux",web:"Web browser",android:"Android",docker:"Docker / self-host",cli:"CLI / MCP",none:"OS-independent (Agent Skill / docs)",hardware:"Dedicated hardware (ESP32)"}}
+    today:"today",stars:"total stars",
+    osLabel:{win:"Windows",mac:"macOS",linux:"Linux",web:"Web browser",android:"Android",ios:"iOS",docker:"Docker / self-host",cli:"CLI / MCP",none:"Docs / Skill",hardware:"Dedicated hardware (ESP32)"}}
 };
 
 const LANG_COLORS = {JavaScript:"#f1e05a",TypeScript:"#3178c6",Python:"#3572A5",Go:"#00ADD8",Rust:"#dea584","C++":"#f34b7d",HTML:"#e34c26",Shell:"#89e051",Swift:"#F05138"};
-const OS_ICON = {win:"🪟",mac:"",linux:"",web:"",android:"",docker:"",cli:"",none:"",hardware:""};
-const OS_TXT = {win:"Win",mac:"mac",linux:"Linux",web:"Web",android:"Android",docker:"Docker",cli:"CLI",none:"OS-free",hardware:"HW"};
 
-let curLang = localStorage.getItem("tr_lang") || "zh";
+let curLang = "zh";
+try { const saved = localStorage.getItem("tr_lang"); if(["zh","en"].includes(saved)) curLang = saved; } catch (_) {}
+if(REPORT.scope === "demo") allRepos().forEach(r => { r.os = []; r.runtime = []; });
 let curCat = "all";
 let curQ = "";
 let curLangFilter = "all";
@@ -377,18 +388,49 @@ let tblSort = {k:"today",dir:-1};
 
 const $ = id => document.getElementById(id);
 const fmt = n => n.toLocaleString("en-US");
+const esc = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function validURL(url){ try { const u = new URL(url); return u.protocol === "https:" && !u.username && !u.password; } catch (_) { return false; } }
+function evidenceHTML(r){
+  const links = (r.sources || []).filter(s => validURL(s.url)).map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label?.[curLang] || s.url)}</a>`);
+  return links.length ? `<div class="evidence">${curLang==="zh"?"解读来源":"Analysis sources"}: ${links.join(" · ")}</div>` : "";
+}
+function scopeLabel(){
+  return REPORT.scope === "demo" ? (curLang==="zh"?"历史示例，数据与兼容性未复核":"Historical example; data and compatibility unverified")
+    : REPORT.scope === "overall" ? (curLang==="zh"?"GitHub Trending 总榜快照":"GitHub Trending overall-board snapshot")
+    : (curLang==="zh"?"总榜 + 所选语言分榜的聚合样本，非总榜还原":"Overall + selected language-board sample; not a reconstruction of the overall board");
+}
+function sourceFooter(){
+  const scope = scopeLabel();
+  const links = (REPORT.sources || []).filter(s => validURL(s.url)).map(s => `<a href="${esc(s.url)}" target="_blank" rel="noopener" title="${esc(s.fetched_at)}">${esc(s.language || (curLang==="zh"?"总榜":"Overall"))}</a>`).join(" · ");
+  const time = REPORT.fetched_at ? ` · ${curLang==="zh"?"抓取":"Fetched"}: ${esc(REPORT.fetched_at)}` : "";
+  const note = curLang==="zh"?"计数为抓取快照；有安装包不代表已实测运行。未编辑项目保留官方原文。":"Counts are fetch-time snapshots; packages do not prove tested compatibility. Unedited descriptions retain the official source language.";
+  return `${esc(scope)}${time}<br>${links}<br>${note}`;
+}
 
 function applyLang(){
   const t = I18N[curLang];
   document.documentElement.lang = curLang === "zh" ? "zh-CN" : "en";
   $("pageTitle").textContent = t.title;
-  $("datePill").textContent = t.date;
+  $("datePill").textContent = REPORT.date;
+  document.title = t.title + " · " + REPORT.date;
+  $("featuredTitle").textContent = curLang==="zh" ? "精选解读" : "Featured analysis";
+  $("featuredSub").textContent = t.featSub;
+  $("featuredTitle").hidden = $("featuredSub").hidden = $("cards").hidden = DATA.length === 0;
+  $("scopeNote").textContent = scopeLabel();
   $("q").placeholder = t.ph;
-  $("moreTitle").textContent = t.moreTitle;
+  $("moreTitle").textContent = curLang==="zh" ? "榜单项目 · 其余项目" : "Ranking · Remaining projects";
   $("moreSub").textContent = t.moreSub;
-  $("footer").textContent = t.foot;
+  $("footer").innerHTML = sourceFooter();
   $("btnZh").setAttribute("aria-pressed", curLang==="zh");
   $("btnEn").setAttribute("aria-pressed", curLang==="en");
+  $("q").setAttribute("aria-label", t.ph);
+  $("langFilter").setAttribute("aria-label", curLang==="zh"?"编程语言筛选":"Programming language filter");
+  $("sortSel").setAttribute("aria-label", curLang==="zh"?"排序":"Sort");
+  const labels = curLang==="zh" ? ["今日 Star ↓","总 Star ↓","名称 A-Z"] : ["Stars today ↓","Total stars ↓","Name A-Z"];
+  Array.from($("sortSel").options).forEach((o,i) => o.textContent=labels[i]);
+  const tableLabels = curLang==="zh" ? ["序号","项目","简介","语言","今日 ★","总 ★"] : ["Position","Repo","Description","Language","Today ★","Total ★"];
+  document.querySelectorAll("#tbl th").forEach((th,i) => th.querySelector("button").textContent=tableLabels[i]);
+  updateSortHeaders();
   renderStats(); renderChips(); renderLangFilter(); renderAll();
 }
 
@@ -398,21 +440,22 @@ function renderStats(){
   const t = I18N[curLang];
   const all = allRepos();
   const sumToday = all.reduce((s,r)=>s+r.today,0);
-  const top = DATA[0];
-  const aiCount = all.filter(r=>["skill","agent","rag"].includes(r.cat)).length;
+  const top = Math.max(0, ...all.map(r=>r.today));
+  const classified = all.filter(r=>r.cat!=="uncategorized").length;
+  const aiCount = all.filter(r=>["skill","agent","rag","model"].includes(r.cat)).length;
   $("stats").innerHTML = [
     {k:t.s1, v:all.length, c:"blue"},
     {k:t.s2, v:fmt(sumToday), c:"gold"},
-    {k:t.s3, v:fmt(top.today)+" ★", c:"green"},
-    {k:t.s4, v:Math.round(aiCount/all.length*100)+"%", c:"purple"}
-  ].map(s=>`<div class="stat"><div class="k">${s.k}</div><div class="v ${s.c}">${s.v}</div></div>`).join("");
+    {k:t.s3, v:fmt(top)+" ★", c:"green"},
+    {k:t.s4, v:classified ? Math.round(aiCount/all.length*100)+"%" : "—", c:"purple", note:curLang==="zh"?`已分类 ${classified}/${all.length}`:`Classified ${classified}/${all.length}`}
+  ].map(s=>`<div class="stat"><div class="k">${s.k}</div><div class="v ${s.c}">${s.v}</div>${s.note?`<div class="k">${s.note}</div>`:""}</div>`).join("");
 }
 
 function renderChips(){
   const t = I18N[curLang];
-  const cats = ["all", ...new Set(DATA.map(r=>r.cat))];
+  const cats = ["all", ...new Set(allRepos().map(r=>r.cat))];
   $("chips").innerHTML = cats.map(c =>
-    `<button class="chip" data-cat="${c}" aria-pressed="${c===curCat}">${t.cats[c]||c}</button>`).join("");
+    `<button class="chip" data-cat="${esc(c)}" aria-pressed="${c===curCat}">${esc(t.cats[c]||c)}</button>`).join("");
   $("chips").querySelectorAll(".chip").forEach(b=>{
     b.onclick = ()=>{ curCat = b.dataset.cat; renderChips(); renderAll(); };
   });
@@ -421,7 +464,7 @@ function renderChips(){
 function renderLangFilter(){
   const langs = ["all", ...new Set(allRepos().map(r=>r.lang).filter(Boolean))].sort((a,b)=>a==="all"?-1:b==="all"?1:a.localeCompare(b));
   const cur = curLangFilter;
-  $("langFilter").innerHTML = langs.map(l=>`<option value="${l}" ${l===cur?"selected":""}>${l==="all"?(curLang==="zh"?"全部语言":"All languages"):l}</option>`).join("");
+  $("langFilter").innerHTML = langs.map(l=>`<option value="${esc(l)}" ${l===cur?"selected":""}>${l==="all"?(curLang==="zh"?"全部语言":"All languages"):esc(l)}</option>`).join("");
 }
 
 function matches(r){
@@ -429,7 +472,7 @@ function matches(r){
   if(curLangFilter!=="all" && r.lang!==curLangFilter) return false;
   if(curQ){
     const q = curQ.toLowerCase();
-    const hay = (r.name+" "+r.d.zh+" "+r.d.en).toLowerCase();
+    const hay = (r.name+" "+r.d.zh+" "+r.d.en+" "+Object.values(r.purpose||{}).join(" ")+" "+Object.values(r.feats||{}).flat().join(" ")).toLowerCase();
     if(!hay.includes(q)) return false;
   }
   return true;
@@ -437,11 +480,20 @@ function matches(r){
 
 function osBadges(r){
   const t = I18N[curLang];
-  return (r.os||[]).map(o=>{
-    let cls = "";
-    if(o==="none") cls="na"; else if(o==="cli"||o==="docker"||o==="web") cls="info";
-    return `<span class="os ${cls}">${t.osLabel[o]||o}</span>`;
-  }).join("");
+  const evidenceFor = o => (r.os_evidence||[]).find(e=>e.os===o && validURL(e.url));
+  const platforms = (r.os||[]).filter(o => ["win","mac","linux","android","ios"].includes(o) && evidenceFor(o));
+  const runtimes = [...new Set([...(r.runtime||[]), ...(r.os||[]).filter(o=>["cli","docker","web","none","hardware"].includes(o))])];
+  const badge = (o, runtime) => {
+    const evidence = evidenceFor(o);
+    const note = evidence?.note?.[curLang] || (curLang==="zh"?"运行方式，不代表系统兼容性":"Runtime type, not OS compatibility");
+    const label = t.osLabel[o] || o;
+    return evidence ? `<a class="os ${runtime?"info":""}" href="${esc(evidence.url)}" title="${esc(note)}" target="_blank" rel="noopener">${esc(label)}</a>`
+      : `<span class="os info" title="${esc(note)}">${esc(label)}</span>`;
+  };
+  const unknown = `<span class="os info">${curLang==="zh"?"待确认":"Unverified"}</span>`;
+  const platformHTML = `<span class="os-group"><span class="evidence">${curLang==="zh"?"操作系统":"OS"}:</span>${platforms.length?platforms.map(o=>badge(o,false)).join(""):unknown}</span>`;
+  const runtimeHTML = runtimes.length ? `<span class="os-group"><span class="evidence">${curLang==="zh"?"运行方式":"Runtime"}:</span>${runtimes.map(o=>badge(o,true)).join("")}</span>` : "";
+  return platformHTML + runtimeHTML;
 }
 
 function cardHTML(r, idx){
@@ -453,22 +505,23 @@ function cardHTML(r, idx){
   return `<article class="card ${idx<3?"top3":""}">
     <div class="card-head">
       <span class="rank" aria-label="rank ${idx+1}">${idx+1}</span>
-      <h3 class="rname"><a href="https://github.com/${r.name}" target="_blank" rel="noopener">${r.name}</a></h3>
+      <h3 class="rname"><a href="https://github.com/${esc(r.name)}" target="_blank" rel="noopener">${esc(r.name)}</a></h3>
       <div class="today"><div class="n">+${fmt(r.today)}</div><div class="l">★ ${t.today}</div></div>
     </div>
     <div class="meta">
-      <span><span class="lang-dot" style="background:${dot}"></span>${r.lang||"—"}</span>
+      <span><span class="lang-dot" style="background:${dot}"></span>${esc(r.lang||"—")}</span>
       <span class="stars-t"><svg viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>${fmt(r.total)} ${t.stars}</span>
-      <span class="tag">${t.cats[r.cat]||r.cat}</span>
+      <span class="tag">${esc(t.cats[r.cat]||r.cat)}</span>
     </div>
-    <p class="sec">${curLang==="zh"?r.d.zh:r.d.en}</p>
-    <div class="sec"><b>${t.pPurpose}</b><p>${purp}</p></div>
-    <div class="sec"><b>${t.pFeats}</b><ul>${feats.map(f=>`<li>${f}</li>`).join("")}</ul></div>
-    <div class="sec warn"><b>${t.pWarns}</b><ul>${warn.map(w=>`<li>${w}</li>`).join("")}</ul></div>
+    <p class="sec">${esc(curLang==="zh"?r.d.zh:r.d.en)}</p>
+    <div class="sec"><b>${t.pPurpose}</b><p>${esc(purp)}</p></div>
+    <div class="sec"><b>${t.pFeats}</b><ul>${feats.map(f=>`<li>${esc(f)}</li>`).join("")}</ul></div>
+    <div class="sec warn"><b>${t.pWarns}</b><ul>${warn.map(w=>`<li>${esc(w)}</li>`).join("")}</ul></div>
     <div class="sec"><b>${t.pOs}</b><div class="osrow">${osBadges(r)}</div></div>
+    ${evidenceHTML(r)}
     <div class="card-foot">
-      <a href="https://github.com/${r.name}" target="_blank" rel="noopener">github.com/${r.name} →</a>
-      <a href="https://github.com/${r.name}/releases" target="_blank" rel="noopener">Releases →</a>
+      <a href="https://github.com/${esc(r.name)}" target="_blank" rel="noopener">github.com/${esc(r.name)} →</a>
+      <a href="https://github.com/${esc(r.name)}/releases" target="_blank" rel="noopener">Releases →</a>
     </div>
   </article>`;
 }
@@ -488,21 +541,21 @@ function renderTable(){
   let rows = MORE.filter(matches);
   const {k,dir} = tblSort;
   rows.sort((a,b)=>{
-    let va = k==="rank"? a.today : a[k], vb = k==="rank"? b.today : b[k];
-    if(typeof va === "string") return dir * va.localeCompare(vb);
-    return dir * (va-vb);
+    let va = k==="rank"? a.today : k==="desc"? a.d[curLang] : a[k], vb = k==="rank"? b.today : k==="desc"? b.d[curLang] : b[k];
+    if(typeof va === "string") return dir * va.localeCompare(vb, curLang==="zh"?"zh-CN":"en") || a.name.localeCompare(b.name);
+    return dir * (va-vb) || a.name.localeCompare(b.name);
   });
   $("tbody").innerHTML = rows.length ? rows.map((r,i)=>`
     <tr>
       <td class="num">${i+1}</td>
-      <td><a href="https://github.com/${r.name}" target="_blank" rel="noopener" style="font-family:ui-monospace,Consolas,monospace;font-size:13px">${r.name}</a></td>
-      <td><span class="d">${curLang==="zh"?r.d.zh:r.d.en}</span> ${osBadges(r)}</td>
-      <td><span class="lang-dot" style="background:${LANG_COLORS[r.lang]||"#8b949e"}"></span>${r.lang||"—"}</td>
+      <td><a href="https://github.com/${esc(r.name)}" target="_blank" rel="noopener" style="font-family:ui-monospace,Consolas,monospace;font-size:13px">${esc(r.name)}</a></td>
+      <td><span class="d">${esc(curLang==="zh"?r.d.zh:r.d.en)}</span> ${osBadges(r)} ${evidenceHTML(r)}</td>
+      <td><span class="lang-dot" style="background:${LANG_COLORS[r.lang]||"#8b949e"}"></span>${esc(r.lang||"—")}</td>
       <td class="num todaycell">+${fmt(r.today)}</td>
       <td class="num">${fmt(r.total)}</td>
     </tr>`).join("") : `<tr><td colspan="6" class="empty">${curLang==="zh"?"没有匹配的项目":"No matching projects"}</td></tr>`;
   const n = rows.length;
-  $("countNote").textContent = I18N[curLang].count.replace("{n}", n);
+  $("countNote").textContent = (curLang==="zh" ? `匹配项目：${DATA.filter(matches).length + n} · 精选 ${DATA.filter(matches).length} · 表格 ${n}` : `Matching: ${DATA.filter(matches).length + n} · Featured ${DATA.filter(matches).length} · Table ${n}`);
 }
 
 function renderAll(){ renderCards(); renderTable(); }
@@ -510,19 +563,34 @@ function renderAll(){ renderCards(); renderTable(); }
 /* events */
 $("q").addEventListener("input", e=>{ curQ = e.target.value.trim(); renderAll(); });
 $("langFilter").addEventListener("change", e=>{ curLangFilter = e.target.value; renderAll(); });
-$("sortSel").addEventListener("change", e=>{ curSort = e.target.value; renderCards(); });
+function updateSortHeaders(){
+  const names = curLang==="zh" ? {rank:"今日 Star",today:"今日 Star",total:"总 Star",name:"项目名",desc:"简介",lang:"语言"} : {rank:"Stars today",today:"Stars today",total:"Total stars",name:"Name",desc:"Description",lang:"Language"};
+  $("moreSub").textContent = curLang==="zh" ? `按${names[tblSort.k]}${tblSort.dir===-1?"降序":"升序"} · 点击表头重新排序` : `${names[tblSort.k]} ${tblSort.dir===-1?"descending":"ascending"} · click headers to re-sort`;
+  document.querySelectorAll("#tbl th").forEach(th=>{
+    th.setAttribute("aria-sort", th.dataset.k===tblSort.k ? (tblSort.dir===-1?"descending":"ascending") : "none");
+  });
+}
+$("sortSel").addEventListener("change", e=>{
+  curSort = e.target.value;
+  tblSort = {k:curSort==="total"?"total":curSort==="name"?"name":"today",dir:curSort==="name"?1:-1};
+  updateSortHeaders(); renderAll();
+});
 document.querySelectorAll("#tbl th").forEach(th=>{
-  th.addEventListener("click", ()=>{
+  const button = document.createElement("button"); button.type="button"; button.textContent=th.textContent;
+  th.textContent=""; th.appendChild(button); th.setAttribute("scope","col");
+  button.addEventListener("click", ()=>{
     const k = th.dataset.k;
-    if(tblSort.k===k) tblSort.dir *= -1; else tblSort = {k, dir: k==="name"||k==="desc"||k==="lang" ? 1 : -1};
-    document.querySelectorAll("#tbl th .arr").forEach(a=>a.remove());
-    const arr = document.createElement("span"); arr.className="arr"; arr.textContent = tblSort.dir===-1?" ↓":" ↑";
-    th.appendChild(arr);
-    renderTable();
+    if(tblSort.k===k) tblSort.dir *= -1; else tblSort = {k, dir: ["name","desc","lang"].includes(k)?1:-1};
+    updateSortHeaders(); renderTable();
   });
 });
-$("btnZh").onclick = ()=>{ curLang="zh"; localStorage.setItem("tr_lang","zh"); applyLang(); };
-$("btnEn").onclick = ()=>{ curLang="en"; localStorage.setItem("tr_lang","en"); applyLang(); };
+function setLanguage(language){
+  curLang=language;
+  try { localStorage.setItem("tr_lang",language); } catch (_) {}
+  applyLang();
+}
+$("btnZh").onclick = ()=>setLanguage("zh");
+$("btnEn").onclick = ()=>setLanguage("en");
 
 applyLang();
 </script>

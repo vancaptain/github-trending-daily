@@ -1,0 +1,18 @@
+[
+  {
+    "name": "example/project",
+    "featured": true,
+    "cat": "devtool",
+    "d": {"zh": "虚构示例，仅演示字段结构。", "en": "Fictional example demonstrating the schema only."},
+    "purpose": {"zh": "替换为本次榜单项目的官方用途。", "en": "Replace with the actual project's documented purpose."},
+    "feats": {"zh": ["替换为官方资料明确支持的功能。"], "en": ["Replace with a feature supported by official evidence."]},
+    "warns": {"zh": ["替换为官方资料明确说明的限制。"], "en": ["Replace with a documented limitation."]},
+    "os": ["linux"],
+    "runtime": ["cli"],
+    "os_evidence": [
+      {"os": "linux", "url": "https://github.com/example/project/blob/main/README.md#installation", "note": {"zh": "虚构示例：实际使用时注明版本、架构及限制。", "en": "Fictional example: specify actual version, architecture and limitations."}},
+      {"os": "cli", "url": "https://github.com/example/project/blob/main/README.md#usage", "note": {"zh": "虚构示例：替换为真实 CLI 用法说明。", "en": "Fictional example: replace with actual CLI usage evidence."}}
+    ],
+    "sources": [{"url": "https://github.com/example/project/blob/main/README.md", "label": {"zh": "示例 README（须替换）", "en": "Example README (replace)"}}]
+  }
+]
