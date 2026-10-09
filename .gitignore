@@ -1,0 +1,10 @@
+# 抓取中间产物 / intermediate fetch artifacts
+repos.txt
+out.json
+repo_details.json
+trending_raw.html
+trending_jina.md
+_check.js
+__pycache__/
+*.pyc
+.DS_Store

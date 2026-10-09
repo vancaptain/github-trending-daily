@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Trending 每日精选 · 2026-10-09</title>
+<style>
+:root{
+  --bg:#0d1117; --bg2:#010409; --card:#161b22; --card2:#1c2330;
+  --border:#30363d; --border2:#3d444d;
+  --fg:#e6edf3; --fg2:#9198a1; --fg3:#6e7681;
+  --accent:#e3b341; --accent2:#d97706; --blue:#4493f8; --green:#3fb950; --red:#f85149; --purple:#ab7df8;
+  --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+body{background:var(--bg);color:var(--fg);font:15px/1.6 system-ui,-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;padding-bottom:60px}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+button{cursor:pointer;font-family:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 20px}
+
+/* header */
+header{position:sticky;top:0;z-index:50;background:rgba(1,4,9,.88);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+.hd{display:flex;align-items:center;gap:14px;padding:14px 20px;max-width:1280px;margin:0 auto;flex-wrap:wrap}
+.hd h1{font-size:19px;font-weight:700;letter-spacing:.2px;display:flex;align-items:center;gap:10px}
+.hd .octo{width:26px;height:26px;fill:var(--fg)}
+.date-pill{font:600 12px/1 ui-monospace,Consolas,monospace;color:var(--accent);border:1px solid #4a3f1e;background:#201a08;border-radius:99px;padding:6px 12px}
+.spacer{flex:1}
+.lang-toggle{display:flex;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.lang-toggle button{background:transparent;border:0;color:var(--fg2);padding:7px 14px;font-size:13px;font-weight:600;transition:background .15s,color .15s}
+.lang-toggle button[aria-pressed="true"]{background:var(--blue);color:#fff}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:22px 0 16px}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px}
+.stat .k{font-size:12px;color:var(--fg2);text-transform:uppercase;letter-spacing:.6px}
+.stat .v{font:700 24px/1.2 ui-monospace,Consolas,monospace;margin-top:4px}
+.stat .v.gold{color:var(--accent)} .stat .v.blue{color:var(--blue)} .stat .v.green{color:var(--green)} .stat .v.purple{color:var(--purple)}
+
+/* controls */
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.search{position:relative;flex:1;min-width:220px}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:15px;height:15px;fill:var(--fg3)}
+.search input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--fg);padding:9px 12px 9px 34px;font-size:14px}
+.search input::placeholder{color:var(--fg3)}
+.search input:focus{border-color:var(--blue);outline:none}
+select{background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--fg);padding:9px 10px;font-size:13px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.chip{background:var(--card);border:1px solid var(--border);color:var(--fg2);border-radius:99px;padding:6px 14px;font-size:13px;transition:all .15s}
+.chip:hover{border-color:var(--border2);color:var(--fg)}
+.chip[aria-pressed="true"]{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:600}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:14px}
+@media (max-width:520px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;display:flex;flex-direction:column;gap:10px;transition:border-color .15s,transform .15s}
+.card:hover{border-color:var(--border2)}
+.card.top3{border-color:#4a3f1e;background:linear-gradient(180deg,#1d1a10,var(--card) 45%)}
+.card-head{display:flex;align-items:flex-start;gap:10px}
+.rank{font:800 13px/1 ui-monospace,Consolas,monospace;color:var(--bg);background:var(--fg3);border-radius:6px;padding:5px 8px;flex-shrink:0;margin-top:2px}
+.card:nth-child(1) .rank{background:var(--accent)} .card:nth-child(2) .rank{background:#b8c4ce} .card:nth-child(3) .rank{background:#c77b3d}
+.rname{font:600 16px/1.35 ui-monospace,Consolas,monospace;word-break:break-all}
+.rname a{color:var(--fg)} .rname a:hover{color:var(--blue)}
+.today{margin-left:auto;flex-shrink:0;text-align:right}
+.today .n{font:800 17px/1 ui-monospace,Consolas,monospace;color:var(--accent);white-space:nowrap}
+.today .l{font-size:10px;color:var(--fg3);text-transform:uppercase;letter-spacing:.5px}
+.meta{display:flex;gap:14px;align-items:center;font-size:12.5px;color:var(--fg2);flex-wrap:wrap}
+.lang-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:5px;vertical-align:-1px}
+.stars-t{display:inline-flex;align-items:center;gap:4px}
+.stars-t svg{width:13px;height:13px;fill:var(--fg2)}
+.tag{font-size:11px;color:var(--purple);border:1px solid #3b2f58;background:#1b1630;border-radius:99px;padding:2px 9px}
+.sec{font-size:13.5px}
+.sec b{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--fg3);margin-bottom:3px;font-weight:700}
+.sec ul{margin:0;padding-left:18px;color:var(--fg2)}
+.sec ul li{margin:2px 0}
+.sec p{color:var(--fg2)}
+.warn b{color:#d29922}
+.osrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.os{font-size:11.5px;font-weight:600;border-radius:5px;padding:3px 9px;background:#12261e;color:#4dd880;border:1px solid #1d4433}
+.os.na{background:#241024;color:#e57dd1;border-color:#4d1d47}
+.os.info{background:#0f2333;color:#6cb6ff;border-color:#1c3a56}
+.card-foot{margin-top:auto;padding-top:8px;border-top:1px dashed var(--border);display:flex;justify-content:space-between;align-items:center}
+.card-foot a{font-size:12.5px;display:inline-flex;align-items:center;gap:5px}
+.card-foot svg{width:13px;height:13px;fill:currentColor}
+
+/* table */
+h2.sec-title{font-size:17px;margin:34px 0 4px}
+.sub{color:var(--fg2);font-size:13px;margin-bottom:12px}
+.tblwrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);background:var(--card)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:760px}
+th{position:sticky;top:0;background:var(--card2);text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--fg2);padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+th .arr{font-size:10px;color:var(--accent)}
+td{padding:9px 14px;border-bottom:1px solid #21262d;vertical-align:top}
+tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#1a2130}
+td.num{font:600 12.5px ui-monospace,Consolas,monospace;white-space:nowrap}
+td .d{color:var(--fg2)}
+.todaycell{color:var(--accent);font-weight:700}
+footer{margin-top:40px;color:var(--fg3);font-size:12px;text-align:center;line-height:1.8}
+.count-note{font-size:12.5px;color:var(--fg3);margin:0 0 10px}
+.empty{padding:40px;text-align:center;color:var(--fg3)}
+</style>
+</head>
+<body>
+<header>
+  <div class="hd">
+    <svg class="octo" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+    <h1 id="pageTitle">GitHub Trending 每日精选</h1>
+    <span class="date-pill" id="datePill">2026-10-09</span>
+    <span class="spacer"></span>
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button id="btnZh" aria-pressed="true">中文</button>
+      <button id="btnEn" aria-pressed="false">EN</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="stats" id="stats"></div>
+
+  <div class="controls">
+    <div class="search">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.68 11.74a6 6 0 1 1 1.06-1.06l3.04 3.04a.75.75 0 1 1-1.06 1.06ZM11.5 7a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0Z"/></svg>
+      <input id="q" type="search" placeholder="搜索项目名 / 描述… Search projects…" aria-label="Search">
+    </div>
+    <select id="langFilter" aria-label="Language filter"></select>
+    <select id="sortSel" aria-label="Sort">
+      <option value="today">今日 Star ↓ / Stars today</option>
+      <option value="total">总 Star ↓ / Total stars</option>
+      <option value="name">名称 A-Z / Name</option>
+    </select>
+  </div>
+  <div class="chips" id="chips" role="group" aria-label="Category"></div>
+
+  <div class="grid" id="cards"></div>
+
+  <h2 class="sec-title" id="moreTitle">完整榜单 · 其余项目</h2>
+  <p class="sub" id="moreSub">按今日新增 Star 排序 · 点击表头可重新排序</p>
+  <p class="count-note" id="countNote"></p>
+  <div class="tblwrap">
+    <table id="tbl" aria-label="Full ranking table">
+      <thead><tr>
+        <th data-k="rank">#</th>
+        <th data-k="name">项目 / Repo</th>
+        <th data-k="desc">简介 / Description</th>
+        <th data-k="lang">语言 / Lang</th>
+        <th data-k="today">今日 ★</th>
+        <th data-k="total">总 ★</th>
+      </tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <footer id="footer"></footer>
+</main>
+
+<script>
+"use strict";
+/* ---------- data ---------- */
+const DATA = [
+ {name:"morluto/rea",lang:"TypeScript",total:35521,today:15335,cat:"agent",feat:1,
+  os:["cli"],osx:0,
+  d:{zh:"一个统一的逆向工程 MCP 套件：让 AI 编程代理看懂任意应用的功能实现——从应用行为、JS/Electron 应用、.NET 程序集到原生二进制和网站。",en:"One MCP for reverse engineering across binaries, apps and runtime behavior: your AI agent can understand how any feature works, down to the binary level."},
+  purpose:{zh:"看到别的产品里想要的功能？让代理用 REA 无源码 investigates 它如何实现、给出证据、并为你自己的项目复刻一版。",en:"See a feature you like in an app? Ask your agent to investigate it without source code, show evidence, and build a version for your project."},
+  feats:{zh:["连接代理与原生二进制 / JS·Electron / .NET / 网站检查工具","每个结论附带证据与局限性说明","原生分析可复用已有 Ghidra / Hopper 安装","静态 JS 分析无需任何引擎","终端里也可独立使用同一套工具"],en:["Connects your agent to tools for native binaries, JS/Electron, .NET and websites","Every conclusion ships with evidence and stated limitations","Native analysis can reuse an existing Ghidra / Hopper install","Static JS analysis needs no engine at all","Same tools usable directly from the terminal"]},
+  warns:{zh:["逆向他人软件必须遵守目标软件许可与当地法律","安装 Hopper 等分析引擎需要你逐步批准","分析在本地运行，涉密项目注意环境边界"],en:["Reverse engineering must respect the target's license and local law","Installing engines like Hopper requires step-by-step approval","Runs locally — mind the environment boundary for sensitive projects"]}},
+ {name:"boykopovar/AnyPS5",lang:"C++",total:19035,today:5925,cat:"desktop",feat:1,
+  os:["win","linux"],osx:0,
+  d:{zh:"把 PS5 可执行文件自动移植到 Linux / Windows 的工具链：重链接器 + 系统 PRX 库实现，原生运行、无模拟器。",en:"Automatic porting of PS5 executables to Linux/Windows: a relinker plus implementations of system PRX libraries — native execution, no emulation."},
+  purpose:{zh:"把 PS5 游戏可执行文件转换为目标系统原生格式并动态链接到开源实现的系统库，直接跑在本机上。",en:"Converts PS5 executables to native target formats, dynamically linked against open implementations of system libraries, running directly on your machine."},
+  feats:{zh:["relinker 转换可执行格式（v0.1.1 已提供 Win/Linux 二进制）","着色器重编译输出 SPIR-V（经 Spirv-Tools 校验）","SDL 手柄原生支持，键鼠可通过 ini 自定义映射","不加密钥不模拟：靠已知 PRX 函数表（覆盖率持续增长）"],en:["Relinker converts executables (v0.1.1 ships Win/Linux binaries)","Shader recompiler emits SPIR-V, validated with Spirv-Tools","SDL controllers supported; keyboard/mouse mapped via ini","No firmware or keys needed — relies on a growing PRX function table"]},
+  warns:{zh:["早期项目，仅部分游戏可玩（见官方兼容性列表）","不含任何固件/密钥，游戏文件需自行合法获得","遇到未实现状态会直接抛错退出"],en:["Early stage — only some games run (see the compatibility list)","Ships no firmware/keys; game files must be obtained legally","Unimplemented states throw and terminate immediately"]}},
+ {name:"storytold/artcraft",lang:"Rust",total:9842,today:3723,cat:"creative",feat:1,
+  os:["win","mac"],osx:1,
+  d:{zh:"AI 图像与视频创作的「IDE」：2D 合成、3D 布景、角色一致性控制，把 prompt 变成先摆好机位再出图的精确创作流。",en:"An IDE for interactive AI image & video creation: 2D compositing, 3D staging and character identity — turn prompting into precise, repeatable crafting."},
+  purpose:{zh:"给艺术家/设计师/电影人一个在生成前就能控制构图、角色身份与镜头位置的工作台。",en:"Gives artists, designers and filmmakers control over composition, character identity and camera placement before generation."},
+  feats:{zh:["图生 3D 网格、虚拟演员置入一致场景","2D/3D 分层合成 + Kitbashing 场景预排","角色姿态与身份迁移、机位先定后出图","多模型可选，成品可复现"],en:["Image-to-3D mesh, virtual actors in consistent locations","2D/3D layered compositing + kitbashing scene blocking","Character posing & identity transfer; camera set before generating","Multiple model choices with repeatable results"]},
+  warns:{zh:["桌面应用，对 GPU/显存有要求","模型调用可能产生 API 费用","生成内容的版权与商用条款需自行确认"],en:["Desktop app with GPU/VRAM requirements","Model calls may incur API costs","Verify licensing of generated content for commercial use"]}},
+ {name:"cathrynlavery/diagram-design",lang:"HTML",total:47342,today:1744,cat:"skill",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"给 Claude Code / Codex 等 AI 代理用的「编辑级图表设计」skill：42 种图表类型，自包含 HTML+SVG 输出，拒绝 Mermaid 式默认丑图。",en:"An editorial diagram-design skill for Claude Code / Codex: 42 diagram types, self-contained HTML + SVG, no Mermaid slop."},
+  purpose:{zh:"让代理产出的架构图/流程图直接达到可与网站排版融合的编辑级审美，而不需要再进 Figma 手调。",en:"Make agent-generated diagrams meet editorial quality and match your brand, instead of fighting Figma for 30 minutes."},
+  feats:{zh:["42 种图型：Sankey、鱼骨图、Wardley 图、UML、数据库 schema 等","读取你的网站，60 秒匹配品牌配色","可重绘 draw.io / Mermaid / Excalidraw 既有源","语义模式与版式解耦；默认静态、动效可选"],en:["42 types: Sankey, fishbone, Wardley maps, UML, DB schema and more","Reads your website to match brand colors in 60 seconds","Redraws existing draw.io / Mermaid / Excalidraw sources","Semantic patterns decoupled from layout; static by default, motion optional"]},
+  warns:{zh:["输出是静态 HTML+SVG，不替代交互式白板工具","需宿主支持 Agent Skills 标准","风格哲学是「少即是多」，想要花哨效果不合适"],en:["Output is static HTML+SVG, not an interactive whiteboard","Requires a host that supports the Agent Skills standard","Minimalist editorial philosophy — not for flashy visuals"]}},
+ {name:"mattpocock/skills",lang:"Shell",total:281998,today:1696,cat:"skill",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"TypeScript 圈知名教育者 Matt Pocock 日常真实工程所用的 agent skills 合集——「为真工程，不为 vibe coding」。",en:"Matt Pocock's daily agent skills for real engineering (not vibe coding) — small, composable, hackable."},
+  purpose:{zh:"与 GSD/BMAD/Spec-Kit 这类「接管流程」的框架相反：提供小而可改、可组合的技能，把控制权留给你。",en:"Unlike process-owning frameworks (GSD/BMAD/Spec-Kit), these skills stay small and adaptable so you keep control."},
+  feats:{zh:["基于数十年工程经验沉淀的工作流","支持 Claude Code / Codex / Copilot / Gemini / Cursor 等","插件安装可自动更新；skills.sh 方式可手动魔改","跨模型可用"],en:["Workflows distilled from decades of engineering experience","Works with Claude Code / Codex / Copilot / Gemini / Cursor and more","Plugin install auto-updates; skills.sh copy is hand-editable","Model-agnostic"]},
+  warns:{zh:["插件版与 skills.sh 版二选一，同时装会得到两份","不同 agent 的安装命令各不相同","会随作者理念持续演进，注意关注更新"],en:["Pick ONE of plugin or skills.sh — installing both duplicates everything","Install commands differ per agent","Actively evolving — keep an eye on updates"]}},
+ {name:"tt-a1i/archify",lang:"JavaScript",total:80839,today:1220,cat:"skill",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"把任何想法、计划或代码库变成可交互的 HTML 可视化：可探索、可继续对话修改、可分享，架构图支持源码链接追溯。",en:"Turn any idea, plan or codebase into an interactive HTML visual — explorable, conversational, shareable, with source-backed links."},
+  purpose:{zh:"一句话把仓库映射成图，之后继续说「加认证流程」「高亮缓存未命中路径」即可迭代。",en:"One sentence maps your repo; then keep going: 'add authentication', 'highlight the cache-miss path', 'switch to light theme'."},
+  feats:{zh:["支持 Cursor / Claude Code / Codex CLI / OpenCode","也提供 Kimi Work 插件等集成","无需仓库：从纯描述也能生成","节点可跟随源码链接深入"],en:["Works with Cursor / Claude Code / Codex CLI / OpenCode","Also ships as a Kimi Work plugin and other integrations","Repository optional — works from a description alone","Nodes trace back to source links"]},
+  warns:{zh:["产物是 HTML，需浏览器查看","图质量取决于模型对代码库的理解深度","README 含赞助商内容，选择集成时注意甄别"],en:["Output is HTML — view in a browser","Diagram quality depends on the model's code understanding","README contains sponsor content — evaluate integrations carefully"]}},
+ {name:"DuarteSantos8/openGym",lang:"JavaScript",total:8342,today:1214,cat:"selfhost",feat:1,
+  os:["web","android"],osx:0,
+  d:{zh:"自托管健身与体重追踪应用：计划训练、跟练打卡、记录组数与体重、查看肌肉训练/疲劳图谱——数据完全归自己。",en:"A self-hosted gym & body-weight tracker you actually own: plan routines, log sets, see muscle fatigue — your data, your server."},
+  purpose:{zh:"对抗「订阅制 + 数据锁在别人服务器」的健身 App：自托管、无订阅、无广告、无遥测，还能离线与跨设备同步。",en:"A counter to subscription workout apps: self-hosted, no subscription, no ads, no telemetry — yet installable, offline-capable and synced."},
+  feats:{zh:["1,324 个动作库 + 动画演示，按肌肉人体图浏览","Push/Pull/Legs、Upper/Lower、Full Body、5×5 初始计划","超级组/热身组/递减组/休息暂停/计时动作","passkey 登录、PWA 可安装、多端同步","可导入 FitNotes / Strong / Hevy 数据"],en:["1,324 exercises with animated demos on a body map","Starter plans: Push/Pull/Legs, Upper/Lower, Full Body, 5x5","Supersets, warm-ups, drop sets, rest-pause, timed moves","Passkey login, installable PWA, multi-device sync","Import from FitNotes / Strong / Hevy"]},
+  warns:{zh:["需要自己部署与维护服务器（Docker）","健康数据在自己服务器上，记得备份","APK 为安卓封装，iOS 无原生端"],en:["You deploy and maintain your own server (Docker)","Health data lives on your box — back it up","APK is the Android wrapper; no native iOS app"]}},
+ {name:"ayghri/i-have-adhd",lang:"Python",total:55988,today:845,cat:"skill",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"一个「防 AI 废话」skill：阻止编程助手把答案埋在长篇铺垫里，强制结论先行、步骤编号的 ADHD 友好输出。",en:"A skill that stops your coding agent from burying the answer: action first, steps numbered, ADHD-friendly output."},
+  purpose:{zh:"把 AI 回答从「先寒暄、中间绕、结尾 Hope this helps」改成：先给结论动作，再给编号步骤与验证方式。",en:"Turns rambling answers into: the action first, then numbered steps, verification, and minute-level time estimates."},
+  feats:{zh:["结论先行 + 明确编号步骤","精确到行号的编辑指引","分钟级时间预估（而不是「一会儿」）","无需任何 ADHD 诊断即可使用"],en:["Action first with clearly numbered steps","Line-precise editing instructions","Time estimates in minutes, not 'a bit'","No diagnosis needed to use it"]},
+  warns:{zh:["输出风格极简，喜欢详细解释的人可能不适应","定制方式是 fork 并改 SKILL.md","更换宿主时需按 AGENTS.md 重新安装"],en:["Ultra-terse style — not for those who like long explanations","Customize by forking and editing SKILL.md","Re-install per AGENTS.md when switching hosts"]}},
+ {name:"thedotmack/claude-mem",lang:"TypeScript",total:98861,today:838,cat:"agent",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"为 Claude Code 等代理打造的跨会话持久记忆系统：自动捕获工具使用观察 → AI 压缩摘要 → 未来会话按需注入。",en:"Persistent memory compression for Claude Code & friends: captures tool-use observations, compresses them with AI, injects relevant context into future sessions."},
+  purpose:{zh:"解决「会话结束上下文全丢」的问题：让代理对项目的了解跨会话延续，决策、bugfix、安全提醒都可追溯。",en:"Solves lost context between sessions: the agent keeps project knowledge across sessions, with decisions, bugfixes and security alerts traceable."},
+  feats:{zh:["语义压缩与相关性注入","needle 观察（决策/bugfix/安全警报）写入带日期日志","支持 Claude Code / Codex / Gemini / Copilot / OpenCode 等","记忆 provider 可选：托管 / OpenRouter / Gemini key / Anthropic"],en:["Semantic compression with relevance-based injection","Needle observations (decision/bugfix/security) logged by date","Works with Claude Code / Codex / Gemini / Copilot / OpenCode etc.","Pluggable memory provider: hosted / OpenRouter / Gemini key / Anthropic"]},
+  warns:{zh:["默认使用 CMEM Pro 托管云记忆（30 天试用后回退）","介意数据出端的必须显式 --provider 本地模式","安装后需浏览器登录授权"],en:["Defaults to CMEM Pro hosted memory (30-day trial, then fallback)","For local-only, pass --provider explicitly","Requires browser sign-in after install"]}},
+ {name:"docker/docker-agent",lang:"Go",total:4285,today:766,cat:"agent",feat:1,
+  os:["win","mac","linux"],osx:0,
+  d:{zh:"Docker 官方 AI Agent 构建与运行时：YAML 声明式定义 agent，配套工具生态与多 agent 编排，`docker agent` 直接跑。",en:"Docker's AI agent builder & runtime: define agents in declarative YAML, give them tools, orchestrate multi-agent teams with `docker agent`."},
+  purpose:{zh:"不用写代码就能构建、运行、分享能协作解决复杂任务的 AI agent，并纳入 Docker 既有分发体系。",en:"Build, run and share collaborative AI agents with zero code, reusing Docker's distribution model."},
+  feats:{zh:["多 agent 架构，任务自动委派","内置工具 + 任意 MCP server（本地/远程/Docker 化）","模型后端无关：OpenAI/Anthropic/Gemini/Bedrock/Docker Model Runner","RAG：BM25 + 向量 + 混合检索 + 重排","agent 可推送到任意 OCI registry 分享"],en:["Multi-agent architecture with automatic delegation","Built-in tools + any MCP server (local/remote/Docker)","Provider-agnostic: OpenAI/Anthropic/Gemini/Bedrock/Docker Model Runner","RAG: BM25 + embeddings + hybrid search + reranking","Push agents to any OCI registry to share"]},
+  warns:{zh:["需要 Docker Desktop 4.63+ 或独立二进制","模型调用需配置 API key（或用本地 Model Runner）","快速迭代期，API 可能变动"],en:["Needs Docker Desktop 4.63+ or the standalone binary","Set an API key (or use local Model Runner)","Fast-moving project; APIs may change"]}},
+ {name:"addyosmani/agent-skills",lang:"JavaScript",total:103641,today:751,cat:"skill",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"Chrome 工程负责人 Addy Osmani 的生产级工程 skills：把资深工程师的工作流与质量门禁打包，让 AI 代理全流程一致执行。",en:"Production-grade engineering skills by Addy Osmani: senior-engineer workflows and quality gates, packaged for AI coding agents."},
+  purpose:{zh:"把 Idea→Spec→Code→Test→QA→Go 的开发闭环写成 9 个 slash 命令，让代理在每个阶段自动激活对应技能。",en:"Encodes the Idea→Spec→Code→Test→QA→Go loop into 9 slash commands, auto-activating the right skills at each phase."},
+  feats:{zh:["/spec /plan /build /constraints /review /webperf /code-simplify 等 9 命令","/build 一次批准后自动跑完全部任务（仍然测试驱动、逐任务提交）","设计 API、写 UI 时自动触发对应 skill","跨 agent 通用"],en:["9 commands: /spec /plan /build /constraints /review /webperf /code-simplify…","/build runs all tasks autonomously after one approval (still TDD, per-task commits)","Auto-activates skills like api-and-interface-design as you work","Agent-agnostic"]},
+  warns:{zh:["流程偏严格 TDD 与规范，小 prototype 可能嫌重","深度定制需阅读并修改各 SKILL.md","命令覆盖面以仓库最新版为准"],en:["Strict TDD/spec discipline — heavy for quick prototypes","Deep customization means editing each SKILL.md","Command surface evolves — check the repo"]}},
+ {name:"anthropics/knowledge-work-plugins",lang:"Python",total:27984,today:714,cat:"skill",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"Anthropic 官方开源的 11 个知识工作插件（为 Claude Cowork 打造、兼容 Claude Code）：把 Claude 变成销售/客服/产品/数据等职能的专家。",en:"Anthropic's open-source plugins for knowledge workers (built for Claude Cowork, compatible with Claude Code): sales, support, product, data and more."},
+  purpose:{zh:"告诉 Claude 你的团队怎么干活：用哪些工具与数据源、关键流程如何处理、暴露哪些 slash 命令，让产出更一致。",en:"Tell Claude how your team works: which tools and data to pull, how to handle critical workflows, which commands to expose."},
+  feats:{zh:["每个插件捆绑 skills + 连接器 + slash 命令 + 子代理","官方列举 11 个职能：productivity / sales / customer-support / product 等","可按公司流程、术语、工具深度定制"],en:["Each plugin bundles skills, connectors, slash commands and sub-agents","11 job functions out of the box (productivity, sales, support, product…)","Deeply customizable to your company's process and terminology"]},
+  warns:{zh:["针对 Claude 系产品优化，其他代理的兼容性需自行验证","连接器涉及企业数据权限，接入前需评估授权范围"],en:["Optimized for Claude products — verify other hosts yourself","Connectors touch company data; review permissions before enabling"]}},
+ {name:"cloudflare/security-audit-skill",lang:"JavaScript",total:26778,today:708,cat:"skill",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"Cloudflare 开源的代理安全审计 skill：六阶段结构化审计，把你的编码代理变成带覆盖度台账与独立复核的安全审计员。",en:"Cloudflare's security-audit skill: a six-phase structured audit that turns your coding agent into a security auditor with a coverage ledger and independent verification."},
+  purpose:{zh:"源自 Cloudflare 内部漏洞挖掘 harness 的单仓库起点：侦察→覆盖猎捕→候选验证→结构化输出→独立复核→无偏报告。",en:"The single-repo seed of Cloudflare's vuln harness: recon, coverage-led hunting, candidate validation, structured output, independent verification, target-neutral reporting."},
+  feats:{zh:["隔离 agent 猎手 + 覆盖度 critic 找盲区","每条候选交给全新 verifier 尝试证伪","findings.json 按报告 schema 校验","confirmed / needs-validation / rejected 三级结论"],en:["Isolated hunter agents + coverage critics to find gaps","Every unique candidate goes to a fresh verifier trying to disprove it","findings.json validated against report-schema.json","Three verdicts: confirmed / needs validation / rejected"]},
+  warns:{zh:["多阶段多代理会产生大量 API 调用与 token 消耗","只能审计你被授权测试的目标","不能替代合规授权下的人工渗透测试"],en:["Multi-phase multi-agent runs burn significant tokens","Audit only targets you are authorized to test","Not a substitute for authorized manual pentesting"]}},
+ {name:"farion1231/cc-switch",lang:"Rust",total:141805,today:640,cat:"desktop",feat:1,
+  os:["win","mac","linux"],osx:0,
+  d:{zh:"一站式桌面管理器：一键切换 Claude Code / Codex / Gemini CLI / OpenCode 等工具的 API 供应商，集中管理 MCP、Skills 与 Prompts。",en:"All-in-one desktop manager: switch API providers for Claude Code / Codex / Gemini CLI and more in one click, and manage MCP, Skills and Prompts centrally."},
+  purpose:{zh:"告别手改 JSON/TOML/YAML 配置文件：多供应商、多工具的配置切换与备份一处搞定。",en:"Stop hand-editing JSON/TOML/YAML: switch and back up multi-provider, multi-tool configs from one place."},
+  feats:{zh:["支持 10+ 编码工具的供应商切换","MCP / Skills / Prompts 统一管理","跨平台（Win/macOS/Linux，含 arm64）","托管配置带签名发布"],en:["Provider switching for 10+ coding tools","Unified MCP / Skills / Prompts management","Cross-platform (Win/macOS/Linux incl. arm64)","Signed releases"]},
+  warns:{zh:["README 含大量第三方 API 中转赞助商推广，使用前自行评估安全与合规","切换 provider 会改写工具配置文件，建议先备份","注意从官网下载，防范仿冒站点"],en:["README promotes third-party API relays — assess safety/compliance yourself","Switching rewrites tool config files; back up first","Download only from the official site"]}},
+ {name:"thesysdev/openui",lang:"TypeScript",total:10514,today:363,cat:"framework",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"生成式 UI 开放标准：流式优先的 OpenUI Lang 语言让模型边输出边渲染结构化 UI，token 比 JSON 方案省最多 67%。",en:"The open standard for generative UI: streaming-first OpenUI Lang renders structured UI as the model streams, using up to 67% fewer tokens than JSON."},
+  purpose:{zh:"给 AI 助手/副驾/交互产品一个框架无关的生成式 UI 基座：组件库→prompt 指令→流式渲染。",en:"A framework-agnostic foundation for assistants, copilots and interactive flows: component library → prompt instructions → streaming renderer."},
+  feats:{zh:["React / Vue / Svelte / Angular 官方运行时","内置图表、表单、表格、布局组件库","从你允许的组件自动生成模型指令","同一基座可做聊天界面或完整应用"],en:["First-party runtimes for React / Vue / Svelte / Angular","Built-in charts, forms, tables and layout components","Prompt generation from your allowed component set","Same foundation for chat UIs or full apps"]},
+  warns:{zh:["官方声明：无任何官方加密货币/代币，同名资产均为骗局","需自配 LLM API key","标准仍在演进，注意破坏性变更"],en:["No official crypto/token — same-name assets are scams","Bring your own LLM API key","Standard still evolving; expect breaking changes"]}},
+ {name:"alibaba/open-code-review",lang:"Go",total:44835,today:323,cat:"devtool",feat:1,
+  os:["win","mac","linux"],osx:0,
+  d:{zh:"阿里巴巴内部打磨两年后开源的 AI 代码评审 CLI：确定性流水线 + LLM Agent，行级精准评论，内置多语言安全规则集。",en:"Alibaba's battle-tested AI code-review CLI, now open source: deterministic pipelines + LLM agent, line-precise comments, built-in multi-language rulesets."},
+  purpose:{zh:"在真实大规模研发中做代码评审：读 Git diff、按需检索代码库上下文、产出结构化行级评论；也可全文件扫描审计陌生代码。",en:"Code review at scale: reads diffs, searches the codebase for context, produces structured line-level comments; also full-file scanning for unfamiliar code."},
+  feats:{zh:["内置 NPE / 线程安全 / XSS / SQL 注入等规则集","ocr scan 全文件审计模式","官方基准：同模型下精确率/F1 显著更高，token 约 1/9","附带 50 仓库 200 真实 PR 的 AACR-Bench 数据集","OpenAI / Anthropic 兼容接口"],en:["Rulesets: NPE, thread-safety, XSS, SQL injection and more","ocr scan mode reviews whole files","Benchmarked: higher precision/F1, ~1/9 tokens vs general agents","Ships AACR-Bench: 50 repos, 200 real PRs, 10 languages","OpenAI / Anthropic compatible endpoints"]},
+  warns:{zh:["刻意牺牲召回换精确率——存在漏报，不能只靠它","评审质量依赖所配置的模型","Go 单二进制，跨平台无 GUI"],en:["Deliberately trades recall for precision — expect missed issues","Review quality depends on the configured model","Go binary, cross-platform, CLI only"]}},
+ {name:"hugohe3/ppt-master",lang:"Python",total:58528,today:308,cat:"skill",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"AI 把文档或主题变成「原生可编辑」的 PPTX：真实形状、切换动画、数据图表、旁白音频，还支持你自己的模板。",en:"AI turns documents or topics into native, editable PPTX decks: real shapes, transitions, data-backed charts, narrated audio, and your own templates."},
+  purpose:{zh:"解决 AI 生成 PPT「图片拼贴不可编辑」的痛点：输出真正的 PowerPoint 对象，可在 PPT 里继续精修。",en:"Fixes the 'AI decks are just picture collages' problem: output is real PowerPoint objects you can keep refining in PowerPoint."},
+  feats:{zh:["理解 PDF / DOCX / 网页，提炼要点并结构化叙事","原生形状、过渡与动画，图表表格随需求生成","按演讲备注生成配音旁白","支持导入自己的 .pptx 模板"],en:["Understands PDF / DOCX / web pages, structures the narrative","Native shapes, transitions and animations; charts and tables on demand","Audio narration generated from speaker notes","Bring your own .pptx templates"]},
+  warns:{zh:["生成质量依赖所配置的模型（长上下文模型效果更好）","复杂排版仍需人工微调","README 含赞助商 API 中转推广"],en:["Quality depends on the configured model (long-context helps)","Complex layouts still need manual polish","README contains sponsor/relay promotions"]}},
+ {name:"Vincentwei1021/video-shotcraft",lang:"TypeScript",total:10977,today:241,cat:"skill",feat:1,
+  os:["win","mac","linux"],osx:0,
+  d:{zh:"让 Claude Code / Codex 变成动态设计工作室：基于 Remotion 生成电影感产品宣传片——分镜、动画、音效一条龙。",en:"Turns Claude Code / Codex into a motion-design studio: cinematic product videos via Remotion — storyboards, animation and sound design included."},
+  purpose:{zh:"输入产品，产出真实页面捕获、2.5D 运镜、节拍卡点、电影级音效的宣传/发布/演示视频。",en:"Point it at your product to get promo/launch/demo videos with real page captures, 2.5D camera moves, beat-synced cuts and film-grade SFX."},
+  feats:{zh:["157 张镜头配方卡 + 214 种风格与动效预览","9 套一键主题（Ink Press / Midnight / Deep Ocean 等）","交付后可在浏览器 Motion Workbench 继续剪辑","姊妹项目 video-talkcraft 专做口播视频"],en:["157 shot recipe cards + 214 styles & motion previews","9 one-click film themes (Ink Press, Midnight, Deep Ocean…)","Post-delivery editing in the browser Motion Workbench","Sister project video-talkcraft for narration videos"]},
+  warns:{zh:["需要 Node + Remotion 渲染环境，渲染耗时较长","商用前确认素材与模型输出的版权","对模型能力要求较高"],en:["Needs Node + Remotion; rendering takes time","Clear rights for assets and model output before commercial use","Demands a capable model"]}},
+ {name:"bojieli/ai-agent-book",lang:"Python",total:53149,today:238,cat:"learn",feat:1,
+  os:["none"],osx:0,
+  d:{zh:"李博杰《深入理解 AI Agent：设计原理与工程实践》开源全书：10 章正文、109 个配套实验、15 种语言、PDF/EPUB 免费下载。",en:"Li Bojie's open-source book 'AI Agent: Design Principles & Engineering Practice': 10 chapters, 109 hands-on labs, 15 languages, free PDF/EPUB."},
+  purpose:{zh:"围绕「Agent = LLM + 上下文 + 工具」核心公式，从原理到生产实践系统讲透 AI Agent。",en:"Teaches AI agents from principles to production around the formula Agent = LLM + Context + Tools."},
+  feats:{zh:["10 章正文 + 109 个可动手复现的实验","15 种语言（中/英/西/日/韩/俄…社区翻译）","在线阅读支持高亮、笔记、章节折叠","姊妹篇《深入理解 AI Infra》也已开源"],en:["10 chapters + 109 reproducible labs","15 languages via community translations","Online reading with highlights, notes, folding","Sister book on AI Infra also open sourced"]},
+  warns:{zh:["中文为原版，社区翻译可能滞后于最新版","实验需自备模型 API 与环境","2.0 版章节结构有调整，注意使用最新 PDF"],en:["Chinese is the source; translations may lag","Labs need your own model API and environment","Chapter layout changed in v2.0 — use the latest PDF"]}},
+ {name:"Tencent/WeKnora",lang:"Go",total:32786,today:220,cat:"rag",feat:1,
+  os:["docker","web"],osx:0,
+  d:{zh:"腾讯开源的 LLM 知识库框架：RAG 检索、Agent 多步推理与自维护 Wiki 共用同一知识库，面向企业文档理解。",en:"Tencent's open-source LLM knowledge framework: RAG retrieval, agentic reasoning and a self-maintaining wiki over one shared knowledge base."},
+  purpose:{zh:"把团队散落的文档聚合成可检索、可推理、可持续更新的知识层，并通过 IM 与浏览器触达用户。",en:"Unify team documents into a searchable, reasoning-ready, ever-updating knowledge layer, reachable via IM and the browser."},
+  feats:{zh:["Skill 跑在会话级 Docker/E2B 沙箱，带图形桌面","BrowserSkill 可操控用户自己的 Chrome/Edge","自动同步飞书/Confluence/Notion/语雀/钉钉等 10+ 来源","企业微信/飞书/Slack/Telegram 问答集成","内置 MCP Server + 范围化 API key"],en:["Skills run in session-persistent Docker/E2B sandboxes with a GUI desktop","BrowserSkill drives your own Chrome/Edge","Auto-sync 10+ sources: Feishu, Confluence, Notion, Yuque, DingTalk…","Q&A in WeCom / Feishu / Slack / Telegram","Built-in MCP server + scoped API keys"]},
+  warns:{zh:["部署组件较多，Docker 必备","连接企业数据源时注意权限最小化","浏览器操控扩展能力强大，授权需谨慎"],en:["Multiple deployment components; Docker required","Apply least-privilege when connecting enterprise sources","The browser-control extension is powerful — grant carefully"]}},
+ {name:"openai/codex",lang:"Rust",total:128351,today:214,cat:"devtool",feat:1,
+  os:["win","mac","linux"],osx:0,
+  d:{zh:"OpenAI 官方终端编码代理（Rust 实现）：本地读写代码、执行命令、提交 PR，另有 IDE 扩展、桌面 App 与云端 Codex Web。",en:"OpenAI's official terminal coding agent (Rust): reads/writes code, runs commands, opens PRs locally — plus IDE extensions, a desktop app and Codex Web."},
+  purpose:{zh:"在你的终端里跑一个能干活的编码代理，也可嵌入 VS Code/Cursor/Windsurf 或使用桌面形态。",en:"A working coding agent in your terminal, also embeddable in VS Code/Cursor/Windsurf or usable as a desktop app."},
+  feats:{zh:["一键安装脚本（Mac/Linux/Windows PowerShell）","多平台二进制（含 arm64）+ 包管理器安装","codex app 桌面形态","与 Codex Web 云端任务互通"],en:["One-line installers (macOS/Linux shell, Windows PowerShell)","Multi-platform binaries incl. arm64 + package managers","codex app desktop experience","Interop with Codex Web cloud tasks"]},
+  warns:{zh:["需要 ChatGPT 账号或 API 计费","代理会执行真实命令，沙箱外操作需审批确认","关注 OpenAI 数据使用政策"],en:["Requires a ChatGPT account or API billing","The agent runs real commands — approve risky actions","Review OpenAI's data-use policy"]}}
+];
+
+const MORE = [
+ {name:"datawhalechina/hello-agents",lang:"Python",total:82202,today:193,cat:"learn",d:{zh:"《从零开始构建智能体》开源教程：智能体原理与实践。",en:"Open-source tutorial: build AI agents from scratch."},os:["none"]},
+ {name:"typesense/typesense",lang:"C++",total:26806,today:165,cat:"devtool",d:{zh:"容错快速的内存搜索引擎，Algolia/Pinecone 开源替代。",en:"Fast, typo-tolerant in-memory search engine."},os:["docker"]},
+ {name:"Tencent-Hunyuan/Hy-MT2",lang:"Python",total:1161,today:147,cat:"model",d:{zh:"腾讯混元（Hunyuan）新发布模型仓库。",en:"New Tencent Hunyuan model repository."},os:["none"]},
+ {name:"unslothai/unsloth",lang:"Python",total:77587,today:140,cat:"agent",d:{zh:"本地运行与训练 LLM/扩散模型的 UI，支持 GGUF、MLX 等。",en:"Local UI to run & train LLMs and diffusion models."},os:["linux","mac","win"]},
+ {name:"microsoft/mxc",lang:"Rust",total:2069,today:135,cat:"devtool",d:{zh:"策略驱动的分层隔离与容器化。",en:"Policy-driven, layered isolation and containment."},os:["linux"]},
+ {name:"K-Dense-AI/scientific-agent-skills",lang:"Python",total:48127,today:134,cat:"skill",d:{zh:"177 个科研 agent skills + 100+ 科学数据库，兼容主流代理。",en:"177 validated science skills + 100+ databases for AI agents."},os:["none"]},
+ {name:"ollama/ollama",lang:"Go",total:182476,today:128,cat:"agent",d:{zh:"一条命令在本地跑 Kimi、GLM、DeepSeek、Qwen 等大模型。",en:"Run Kimi, GLM, DeepSeek, Qwen and more locally."},os:["win","mac","linux"]},
+ {name:"headroomlabs-ai/headroom",lang:"Python",total:74803,today:120,cat:"devtool",d:{zh:"在工具输出进入 LLM 前压缩，为编码代理省 20%~95% token。",en:"Compress tool outputs/logs/RAG chunks before the LLM."},os:["none"]},
+ {name:"multica-ai/multica",lang:"Go",total:52281,today:118,cat:"agent",d:{zh:"让人与 AI agent 作为一个团队协作，可自托管。",en:"Make humans and AI agents work as one team, self-hostable."},os:["docker"]},
+ {name:"Robbyant/lingbot-map",lang:"Python",total:17539,today:109,cat:"model",d:{zh:"流式 3D 重建的几何上下文 Transformer（ECCV 2026 最佳论文候选）。",en:"Geometric Context Transformer for streaming 3D reconstruction."},os:["linux"]},
+ {name:"BerriAI/litellm",lang:"Python",total:60467,today:95,cat:"devtool",d:{zh:"轻快 AI 网关：以 OpenAI 格式调用 100+ LLM API，含成本追踪与负载均衡。",en:"AI gateway: call 100+ LLM APIs in OpenAI format with cost tracking."},os:["docker"]},
+ {name:"QuantumNous/new-api",lang:"Go",total:49506,today:93,cat:"devtool",d:{zh:"多模型统一网关，跨转换为 OpenAI/Claude/Gemini 兼容格式。",en:"Unified AI hub converting LLMs to OpenAI/Claude/Gemini formats."},os:["docker"]},
+ {name:"Wei-Shaw/sub2api",lang:"Go",total:43562,today:90,cat:"devtool",d:{zh:"一站式中转：统一接入 Claude/OpenAI/Gemini/Grok 订阅并分摊成本。",en:"Unified relay for Claude/OpenAI/Gemini/Grok subscriptions."},os:["docker"]},
+ {name:"twostraws/SwiftUI-Agent-Skill",lang:"Swift",total:5229,today:88,cat:"skill",d:{zh:"Paul Hudson 出品的 SwiftUI 开发 agent skill。",en:"SwiftUI agent skill by Paul Hudson."},os:["none"]},
+ {name:"infiniflow/ragflow",lang:"Go",total:91907,today:81,cat:"rag",d:{zh:"领先的开源 RAG 引擎，融合 Agent 能力。",en:"Leading open-source RAG engine with agent capabilities."},os:["docker"]},
+ {name:"MHSanaei/3x-ui",lang:"Go",total:47695,today:81,cat:"devtool",d:{zh:"多协议多用户代理面板（Vmess/Vless/Trojan 等）。",en:"Multi-protocol multi-user proxy panel."},os:["linux"]},
+ {name:"Anil-matcha/Open-Generative-AI",lang:"JavaScript",total:29920,today:75,cat:"creative",d:{zh:"600+ 模型的免费 AI 图像/视频生成工作台，可自托管。",en:"Free AI image & video studio with 600+ models, self-hosted."},os:["web"]},
+ {name:"PurpleDoubleD/locally-uncensored",lang:"TypeScript",total:2104,today:70,cat:"desktop",d:{zh:"本地全能 AI 工作台：聊天/图像/视频生成 + 编码 agent，免 Docker 免终端。",en:"Local all-in-one AI studio: chat, image, video + coding agent."},os:["win","linux"]},
+ {name:"vercel-labs/agent-browser",lang:"Rust",total:43717,today:69,cat:"agent",d:{zh:"面向 AI agent 的浏览器自动化 CLI。",en:"Browser automation CLI for AI agents."},os:["win","mac","linux"]},
+ {name:"liyupi/ai-guide",lang:"JavaScript",total:20901,today:61,cat:"learn",d:{zh:"程序员鱼皮的 AI 资源大全与 Vibe Coding 零基础教程。",en:"AI resources & vibe coding guide (Chinese)."},os:["none"]},
+ {name:"vxcontrol/pentagi",lang:"Go",total:25384,today:56,cat:"agent",d:{zh:"能执行复杂渗透测试任务的全自主 AI Agent 系统。",en:"Fully autonomous AI agents for complex pentesting."},os:["docker"]},
+ {name:"k4yt3x/video2x",lang:"C++",total:22104,today:55,cat:"desktop",d:{zh:"基于机器学习的视频超分辨率与补帧框架。",en:"ML-based video super-resolution & frame interpolation."},os:["win","linux"]},
+ {name:"Agent-Field/CodeAF",lang:"Go",total:360,today:51,cat:"agent",d:{zh:"面向开源模型的开源软件工厂。",en:"Open-source software factory for open models."},os:["docker"]},
+ {name:"FreeCAD/FreeCAD",lang:"C++",total:34075,today:50,cat:"desktop",d:{zh:"开源跨平台参数化 3D 建模器。",en:"Free, open-source multiplatform 3D parametric modeler."},os:["win","mac","linux"]},
+ {name:"justcallmekoko/ESP32Marauder",lang:"C++",total:12664,today:50,cat:"hardware",d:{zh:"ESP32 的 WiFi/蓝牙攻防工具集。",en:"WiFi/BT offensive & defensive toolkit for ESP32."},os:["hardware"]},
+ {name:"jdx/mise",lang:"Rust",total:34819,today:47,cat:"devtool",d:{zh:"开发工具管理、环境变量与任务运行器（asdf 替代）。",en:"Dev tools, env vars and task runner."},os:["win","mac","linux"]},
+ {name:"ibelick/ui-skills",lang:"TypeScript",total:9544,today:47,cat:"skill",d:{zh:"面向设计工程师的 UI skills 合集。",en:"Skills for design engineers."},os:["none"]},
+ {name:"hiroi-sora/Umi-OCR",lang:"Python",total:47712,today:43,cat:"desktop",d:{zh:"开源免费离线 OCR：截屏/批量图片/PDF，支持二维码与多语言。",en:"Free offline OCR: screenshots, batch images, PDF, QR codes."},os:["win","linux"]},
+ {name:"78/xiaozhi-esp32",lang:"C++",total:30561,today:42,cat:"hardware",d:{zh:"基于 MCP 的 ESP32 聊天机器人（小智）。",en:"MCP-based chatbot on ESP32."},os:["hardware"]},
+ {name:"trufflesecurity/trufflehog",lang:"Go",total:28385,today:40,cat:"devtool",d:{zh:"发现、验证并分析泄露凭据。",en:"Find, verify and analyze leaked credentials."},os:["win","mac","linux"]},
+ {name:"VERT-sh/VERT",lang:"TypeScript",total:15792,today:45,cat:"web",d:{zh:"下一代文件转换器：开源、完全本地、永久免费。",en:"Next-gen file converter: open source, fully local, free."},os:["web"]},
+ {name:"Snailclimb/JavaGuide",lang:"JavaScript",total:158904,today:33,cat:"learn",d:{zh:"Java 面试与后端通用面试指南（中文）。",en:"Java interview & backend guide (Chinese)."},os:["none"]},
+ {name:"tirth8205/code-review-graph",lang:"Python",total:31997,today:28,cat:"devtool",d:{zh:"本地优先的代码智能图谱：为 MCP/CLI 提供持久代码库地图。",en:"Local-first code intelligence graph for MCP and CLI."},os:["win","mac","linux"]},
+ {name:"cartesiancs/map3d",lang:"TypeScript",total:2567,today:27,cat:"framework",d:{zh:"用 R3F 生成含建筑与道路信息的城市 3D 地图。",en:"Generate city 3D maps with R3F, incl. buildings & roads."},os:["none"]},
+ {name:"alsk1992/CloddsBot",lang:"TypeScript",total:2938,today:27,cat:"agent",d:{zh:"跨 1000+ 市场的自托管 AI 交易 agent（Polymarket/Kalshi/币安等）。",en:"Self-hosted AI trading agent across 1000+ markets."},os:["docker"]},
+ {name:"DamRsn/NeuralNote",lang:"C++",total:3059,today:27,cat:"desktop",d:{zh:"深度学习音频转 MIDI 的音频插件。",en:"Audio plugin for audio-to-MIDI transcription."},os:["win","mac"]},
+ {name:"apify/crawlee",lang:"TypeScript",total:26082,today:26,cat:"framework",d:{zh:"Node.js 网页抓取与浏览器自动化库，支持 Puppeteer/Playwright。",en:"Web scraping & browser automation library for Node.js."},os:["none"]},
+ {name:"makecindy/cindy",lang:"TypeScript",total:2968,today:24,cat:"agent",d:{zh:"开箱即用的开源 AI Agent（中英双语）。",en:"The open-source AI agent that works out of the box."},os:["win","mac","linux"]},
+ {name:"XTLS/Xray-core",lang:"Go",total:42014,today:24,cat:"devtool",d:{zh:"多用途开放网络代理平台（v2ray-core 后继）。",en:"Open platform for network proxying, successor of v2ray-core."},os:["win","mac","linux"]},
+ {name:"aunetx/blur-my-shell",lang:"JavaScript",total:2288,today:22,cat:"desktop",d:{zh:"给 GNOME Shell 顶栏/Dash/概览加毛玻璃效果的扩展。",en:"GNOME Shell extension adding blur to panel, dash and overview."},os:["linux"]},
+ {name:"chaolucky18/xuexitongScript",lang:"JavaScript",total:2750,today:22,cat:"web",d:{zh:"学习通自动刷课脚本（中文）。",en:"Auto course-watcher script for Xuexitong (Chinese)."},os:["web"]},
+ {name:"fish2018/pansou",lang:"Go",total:14841,today:19,cat:"devtool",d:{zh:"高性能网盘资源搜索 API，Docker 一键启动。",en:"High-performance cloud-drive search API, Docker-ready."},os:["docker"]},
+ {name:"songquanpeng/one-api",lang:"JavaScript",total:37106,today:14,cat:"devtool",d:{zh:"LLM API 管理与二次分发系统，单文件部署。",en:"LLM API management & key redistribution, single binary."},os:["docker"]},
+ {name:"kvcache-ai/Mooncake",lang:"C++",total:6745,today:10,cat:"devtool",d:{zh:"月之暗面 Kimi 的推理服务平台。",en:"Serving platform for Moonshot AI's Kimi."},os:["linux"]},
+ {name:"TencentCloud/CubeSandbox",lang:"Go",total:12847,today:10,cat:"devtool",d:{zh:"即时、并发、安全的轻量 AI Agent 沙箱。",en:"Instant, concurrent, secure and lightweight sandbox for AI agents."},os:["linux"]},
+ {name:"wolfpld/tracy",lang:"C++",total:16898,today:8,cat:"devtool",d:{zh:"高性能帧分析器。",en:"High-performance frame profiler."},os:["win","mac","linux"]},
+ {name:"hashicorp/vault",lang:"Go",total:36362,today:7,cat:"devtool",d:{zh:"密钥管理、加密即服务与特权访问管理。",en:"Secrets management, encryption as a service, PAM."},os:["win","mac","linux"]},
+ {name:"google/perfetto",lang:"C++",total:6616,today:7,cat:"devtool",d:{zh:"生产级客户端 tracing、profiling 与分析。",en:"Production-grade tracing, profiling and analysis."},os:["win","mac","linux"]},
+ {name:"chuspeeism/dashi-taskboard",lang:"JavaScript",total:3310,today:7,cat:"web",d:{zh:"现代化可灵活嵌入的任务面板。",en:"Modern, flexibly embeddable task board."},os:["web"]},
+ {name:"microsoft/power-platform-skills",lang:"JavaScript",total:979,today:7,cat:"skill",d:{zh:"Power Platform 开发插件市场（Copilot 等 agent 用）。",en:"Plugin marketplace of Power Platform skills for AI agents."},os:["none"]},
+ {name:"grafana/mcp-grafana",lang:"Go",total:3538,today:6,cat:"devtool",d:{zh:"Grafana 的 MCP 服务器。",en:"MCP server for Grafana."},os:["none"]},
+ {name:"ROCm/rocm-systems",lang:"C++",total:527,today:2,cat:"devtool",d:{zh:"AMD ROCm 系统项目 super repo。",en:"Super repo for AMD ROCm systems projects."},os:["linux"]}
+];
+
+/* ---------- i18n ---------- */
+const I18N = {
+ zh:{title:"GitHub Trending 每日精选",date:"2026-10-09",
+    s1:"上榜项目",s2:"今日新增 Star 总计",s3:"单日最高",s4:"Agent / AI 类占比",
+    ph:"搜索项目名 / 描述…",cats:{all:"全部",skill:"Agent Skill",agent:"Agent 工具/框架",desktop:"桌面应用",devtool:"开发者工具",selfhost:"自托管服务",web:"Web 应用",learn:"学习资源",creative:"创意应用",rag:"知识库 / RAG",framework:"前端/框架",model:"模型",hardware:"硬件"},
+    featTitle:"今日焦点 · Top 21（按今日 Star 排序）",featSub:"用途 · 功能 · 注意事项 · 系统兼容性 · 官方链接",
+    moreTitle:"完整榜单 · 其余项目",moreSub:"按今日新增 Star 排序 · 点击表头重新排序",count:"共 {n} 个项目",
+    pPurpose:"用途",pFeats:"核心功能",pWarns:"注意事项",pOs:"系统兼容性",
+    today:"今日",stars:"总 Star",foot:"数据来源：github.com/trending（总榜 + 7 个语言榜聚合去重）· 星数为抓取时刻快照 · 系统兼容性依据官方 Release 附件与 README 判定",
+    osLabel:{win:"Windows",mac:"macOS",linux:"Linux",web:"Web 浏览器",android:"Android",docker:"Docker / 自托管",cli:"CLI / MCP",none:"系统无关（Agent Skill / 文档）",hardware:"专用硬件 (ESP32)"}},
+ en:{title:"GitHub Trending Daily Digest",date:"2026-10-09",
+    s1:"Repos listed",s2:"Stars gained today",s3:"Top single-day",s4:"Agent / AI share",
+    ph:"Search projects…",cats:{all:"All",skill:"Agent Skill",agent:"Agent tools/frameworks",desktop:"Desktop apps",devtool:"Dev tools",selfhost:"Self-hosted",web:"Web apps",learn:"Learning",creative:"Creative",rag:"Knowledge / RAG",framework:"Frontend/framework",model:"Models",hardware:"Hardware"},
+    featTitle:"Today's Focus · Top 21 (by stars gained today)",featSub:"Purpose · Features · Caveats · OS compatibility · Official link",
+    moreTitle:"Full Ranking · Remaining Repos",moreSub:"Sorted by stars gained today · click headers to re-sort",count:"{n} projects",
+    pPurpose:"Purpose",pFeats:"Key features",pWarns:"Caveats",pOs:"OS compatibility",
+    today:"today",stars:"total stars",foot:"Source: github.com/trending (overall + 7 language boards, deduplicated) · star counts are a snapshot · OS support inferred from official release assets and READMEs",
+    osLabel:{win:"Windows",mac:"macOS",linux:"Linux",web:"Web browser",android:"Android",docker:"Docker / self-host",cli:"CLI / MCP",none:"OS-independent (Agent Skill / docs)",hardware:"Dedicated hardware (ESP32)"}}
+};
+
+const LANG_COLORS = {JavaScript:"#f1e05a",TypeScript:"#3178c6",Python:"#3572A5",Go:"#00ADD8",Rust:"#dea584","C++":"#f34b7d",HTML:"#e34c26",Shell:"#89e051",Swift:"#F05138"};
+const OS_ICON = {win:"🪟",mac:"",linux:"",web:"",android:"",docker:"",cli:"",none:"",hardware:""};
+const OS_TXT = {win:"Win",mac:"mac",linux:"Linux",web:"Web",android:"Android",docker:"Docker",cli:"CLI",none:"OS-free",hardware:"HW"};
+
+let curLang = localStorage.getItem("tr_lang") || "zh";
+let curCat = "all";
+let curQ = "";
+let curLangFilter = "all";
+let curSort = "today";
+let tblSort = {k:"today",dir:-1};
+
+const $ = id => document.getElementById(id);
+const fmt = n => n.toLocaleString("en-US");
+
+function applyLang(){
+  const t = I18N[curLang];
+  document.documentElement.lang = curLang === "zh" ? "zh-CN" : "en";
+  $("pageTitle").textContent = t.title;
+  $("datePill").textContent = t.date;
+  $("q").placeholder = t.ph;
+  $("moreTitle").textContent = t.moreTitle;
+  $("moreSub").textContent = t.moreSub;
+  $("footer").textContent = t.foot;
+  $("btnZh").setAttribute("aria-pressed", curLang==="zh");
+  $("btnEn").setAttribute("aria-pressed", curLang==="en");
+  renderStats(); renderChips(); renderLangFilter(); renderAll();
+}
+
+function allRepos(){ return DATA.concat(MORE); }
+
+function renderStats(){
+  const t = I18N[curLang];
+  const all = allRepos();
+  const sumToday = all.reduce((s,r)=>s+r.today,0);
+  const top = DATA[0];
+  const aiCount = all.filter(r=>["skill","agent","rag"].includes(r.cat)).length;
+  $("stats").innerHTML = [
+    {k:t.s1, v:all.length, c:"blue"},
+    {k:t.s2, v:fmt(sumToday), c:"gold"},
+    {k:t.s3, v:fmt(top.today)+" ★", c:"green"},
+    {k:t.s4, v:Math.round(aiCount/all.length*100)+"%", c:"purple"}
+  ].map(s=>`<div class="stat"><div class="k">${s.k}</div><div class="v ${s.c}">${s.v}</div></div>`).join("");
+}
+
+function renderChips(){
+  const t = I18N[curLang];
+  const cats = ["all", ...new Set(DATA.map(r=>r.cat))];
+  $("chips").innerHTML = cats.map(c =>
+    `<button class="chip" data-cat="${c}" aria-pressed="${c===curCat}">${t.cats[c]||c}</button>`).join("");
+  $("chips").querySelectorAll(".chip").forEach(b=>{
+    b.onclick = ()=>{ curCat = b.dataset.cat; renderChips(); renderAll(); };
+  });
+}
+
+function renderLangFilter(){
+  const langs = ["all", ...new Set(allRepos().map(r=>r.lang).filter(Boolean))].sort((a,b)=>a==="all"?-1:b==="all"?1:a.localeCompare(b));
+  const cur = curLangFilter;
+  $("langFilter").innerHTML = langs.map(l=>`<option value="${l}" ${l===cur?"selected":""}>${l==="all"?(curLang==="zh"?"全部语言":"All languages"):l}</option>`).join("");
+}
+
+function matches(r){
+  if(curCat!=="all" && r.cat!==curCat) return false;
+  if(curLangFilter!=="all" && r.lang!==curLangFilter) return false;
+  if(curQ){
+    const q = curQ.toLowerCase();
+    const hay = (r.name+" "+r.d.zh+" "+r.d.en).toLowerCase();
+    if(!hay.includes(q)) return false;
+  }
+  return true;
+}
+
+function osBadges(r){
+  const t = I18N[curLang];
+  return (r.os||[]).map(o=>{
+    let cls = "";
+    if(o==="none") cls="na"; else if(o==="cli"||o==="docker"||o==="web") cls="info";
+    return `<span class="os ${cls}">${t.osLabel[o]||o}</span>`;
+  }).join("");
+}
+
+function cardHTML(r, idx){
+  const t = I18N[curLang];
+  const dot = LANG_COLORS[r.lang]||"#8b949e";
+  const warn = curLang==="zh" ? r.warns.zh : r.warns.en;
+  const purp = curLang==="zh" ? r.purpose.zh : r.purpose.en;
+  const feats = curLang==="zh" ? r.feats.zh : r.feats.en;
+  return `<article class="card ${idx<3?"top3":""}">
+    <div class="card-head">
+      <span class="rank" aria-label="rank ${idx+1}">${idx+1}</span>
+      <h3 class="rname"><a href="https://github.com/${r.name}" target="_blank" rel="noopener">${r.name}</a></h3>
+      <div class="today"><div class="n">+${fmt(r.today)}</div><div class="l">★ ${t.today}</div></div>
+    </div>
+    <div class="meta">
+      <span><span class="lang-dot" style="background:${dot}"></span>${r.lang||"—"}</span>
+      <span class="stars-t"><svg viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>${fmt(r.total)} ${t.stars}</span>
+      <span class="tag">${t.cats[r.cat]||r.cat}</span>
+    </div>
+    <p class="sec">${curLang==="zh"?r.d.zh:r.d.en}</p>
+    <div class="sec"><b>${t.pPurpose}</b><p>${purp}</p></div>
+    <div class="sec"><b>${t.pFeats}</b><ul>${feats.map(f=>`<li>${f}</li>`).join("")}</ul></div>
+    <div class="sec warn"><b>${t.pWarns}</b><ul>${warn.map(w=>`<li>${w}</li>`).join("")}</ul></div>
+    <div class="sec"><b>${t.pOs}</b><div class="osrow">${osBadges(r)}</div></div>
+    <div class="card-foot">
+      <a href="https://github.com/${r.name}" target="_blank" rel="noopener">github.com/${r.name} →</a>
+      <a href="https://github.com/${r.name}/releases" target="_blank" rel="noopener">Releases →</a>
+    </div>
+  </article>`;
+}
+
+function renderCards(){
+  const t = I18N[curLang];
+  let rows = DATA.filter(matches);
+  if(curSort==="today") rows.sort((a,b)=>b.today-a.today);
+  else if(curSort==="total") rows.sort((a,b)=>b.total-a.total);
+  else rows.sort((a,b)=>a.name.localeCompare(b.name));
+  $("cards").innerHTML = rows.length ? rows.map((r,i)=>cardHTML(r,i)).join("")
+    : `<div class="empty">${curLang==="zh"?"没有匹配的项目":"No matching projects"}</div>`;
+}
+
+function renderTable(){
+  const t = I18N[curLang];
+  let rows = MORE.filter(matches);
+  const {k,dir} = tblSort;
+  rows.sort((a,b)=>{
+    let va = k==="rank"? a.today : a[k], vb = k==="rank"? b.today : b[k];
+    if(typeof va === "string") return dir * va.localeCompare(vb);
+    return dir * (va-vb);
+  });
+  $("tbody").innerHTML = rows.length ? rows.map((r,i)=>`
+    <tr>
+      <td class="num">${i+1}</td>
+      <td><a href="https://github.com/${r.name}" target="_blank" rel="noopener" style="font-family:ui-monospace,Consolas,monospace;font-size:13px">${r.name}</a></td>
+      <td><span class="d">${curLang==="zh"?r.d.zh:r.d.en}</span> ${osBadges(r)}</td>
+      <td><span class="lang-dot" style="background:${LANG_COLORS[r.lang]||"#8b949e"}"></span>${r.lang||"—"}</td>
+      <td class="num todaycell">+${fmt(r.today)}</td>
+      <td class="num">${fmt(r.total)}</td>
+    </tr>`).join("") : `<tr><td colspan="6" class="empty">${curLang==="zh"?"没有匹配的项目":"No matching projects"}</td></tr>`;
+  const n = rows.length;
+  $("countNote").textContent = I18N[curLang].count.replace("{n}", n);
+}
+
+function renderAll(){ renderCards(); renderTable(); }
+
+/* events */
+$("q").addEventListener("input", e=>{ curQ = e.target.value.trim(); renderAll(); });
+$("langFilter").addEventListener("change", e=>{ curLangFilter = e.target.value; renderAll(); });
+$("sortSel").addEventListener("change", e=>{ curSort = e.target.value; renderCards(); });
+document.querySelectorAll("#tbl th").forEach(th=>{
+  th.addEventListener("click", ()=>{
+    const k = th.dataset.k;
+    if(tblSort.k===k) tblSort.dir *= -1; else tblSort = {k, dir: k==="name"||k==="desc"||k==="lang" ? 1 : -1};
+    document.querySelectorAll("#tbl th .arr").forEach(a=>a.remove());
+    const arr = document.createElement("span"); arr.className="arr"; arr.textContent = tblSort.dir===-1?" ↓":" ↑";
+    th.appendChild(arr);
+    renderTable();
+  });
+});
+$("btnZh").onclick = ()=>{ curLang="zh"; localStorage.setItem("tr_lang","zh"); applyLang(); };
+$("btnEn").onclick = ()=>{ curLang="en"; localStorage.setItem("tr_lang","en"); applyLang(); };
+
+applyLang();
+</script>
+</body>
+</html>
