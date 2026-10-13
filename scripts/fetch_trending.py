@@ -95,7 +95,7 @@ def collect(languages, snapshot_dir):
         snapshot_dir = Path(snapshot_dir)
         snapshot_dir.mkdir(parents=True, exist_ok=True)
         filename = (quote(language, safe="") if language else "overall") + ".html"
-        (snapshot_dir / filename).write_text(html, encoding="utf-8")
+        (snapshot_dir / filename).write_text(html, encoding="utf-8", newline="")
         source = {"url": url, "language": language, "fetched_at": response["fetched_at"],
                   "count": len(rows), "raw_file": filename, "sha256": hashlib.sha256(html.encode()).hexdigest()}
         sources.append(source)
